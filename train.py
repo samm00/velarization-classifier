@@ -5,9 +5,9 @@ import numpy as np
 import ast
 from transformers import AutoModelForAudioClassification, TrainingArguments, Trainer
 
-model_name = "facebook/wav2vec2-base"
+model_name = 'facebook/wav2vec2-base'
 
-data = load_dataset("csv", data_files={'train': "train.csv", 'valid': "valid.csv", 'test': "test.csv"})
+data = load_dataset('csv', data_files={'train': 'data/train.csv', 'valid': 'data/valid.csv', 'test': 'data/test.csv'})
 
 id2label = {0: 'non-velarized', 1: 'velarized'}
 label2id = {'non-velarized': 0, 'velarized': 1}
@@ -15,7 +15,7 @@ label2id = {'non-velarized': 0, 'velarized': 1}
 feature_extractor = AutoFeatureExtractor.from_pretrained(model_name)
 
 def preprocess_function(examples):
-    audio_arrays = [ast.literal_eval(x)["array"][0] for x in examples["audio"]]
+    audio_arrays = [ast.literal_eval(x)['array'][0] for x in examples['audio']]
     inputs = feature_extractor(
         audio_arrays, 
         sampling_rate=feature_extractor.sampling_rate, 
@@ -25,12 +25,12 @@ def preprocess_function(examples):
 
     return inputs
     
-encoded_data = data.map(preprocess_function, remove_columns=["audio", 'path'], batched=True)
+encoded_data = data.map(preprocess_function, remove_columns=['audio', 'path'], batched=True)
 
-accuracy = evaluate.load("accuracy")
-f1 = evaluate.load("f1")
-precision = evaluate.load("precision")
-recall = evaluate.load("recall")
+accuracy = evaluate.load('accuracy')
+f1 = evaluate.load('f1')
+precision = evaluate.load('precision')
+recall = evaluate.load('recall')
 
 def compute_metrics(eval_pred):
     preds = np.argmax(eval_pred.predictions, axis=1)
@@ -46,10 +46,10 @@ model = AutoModelForAudioClassification.from_pretrained(
 )
 
 training_args = TrainingArguments(
-    output_dir="velarization",
+    output_dir='velarization',
     learning_rate=2e-5,
-    evaluation_strategy="epoch",
-    save_strategy="epoch",
+    evaluation_strategy='epoch',
+    save_strategy='epoch',
     per_device_train_batch_size=2,
     gradient_accumulation_steps=4,
     per_device_eval_batch_size=2,
@@ -59,15 +59,15 @@ training_args = TrainingArguments(
     weight_decay=0.01,
     logging_steps=25,
     load_best_model_at_end=True,
-    metric_for_best_model="f1",
+    metric_for_best_model='f1',
     remove_unused_columns = False,
 )
 
 trainer = Trainer(
     model=model,
     args=training_args,
-    train_dataset=encoded_data["train"],
-    eval_dataset=encoded_data["valid"],
+    train_dataset=encoded_data['train'],
+    eval_dataset=encoded_data['valid'],
     tokenizer=feature_extractor,
     compute_metrics=compute_metrics,
 )
