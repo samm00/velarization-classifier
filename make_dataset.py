@@ -52,8 +52,6 @@ train = data.loc[train_idx]
 valid = data.loc[valid_idx]
 test = data.loc[test_idx]
 
-print(test)
-
 train.to_csv('data/train.csv', index = False, columns = ['audio', 'label', 'path'])
 valid.to_csv('data.valid.csv', index = False, columns = ['audio', 'label', 'path'])
 test.to_csv('data/test.csv', index = False, columns = ['audio', 'label', 'path'])

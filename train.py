@@ -5,9 +5,7 @@ import numpy as np
 import ast
 from transformers import AutoModelForAudioClassification, TrainingArguments, Trainer
 
-
 model_name = "facebook/wav2vec2-base"
-# model_name = 'mnazari/wav2vec2-assyrian'
 
 data = load_dataset("csv", data_files={'train': "train.csv", 'valid': "valid.csv", 'test': "test.csv"})
 
@@ -57,7 +55,6 @@ training_args = TrainingArguments(
     per_device_eval_batch_size=2,
     gradient_checkpointing=True,
     fp16=True,
-    #optim="adafactor",
     num_train_epochs=5,
     weight_decay=0.01,
     logging_steps=25,
@@ -75,15 +72,6 @@ trainer = Trainer(
     compute_metrics=compute_metrics,
 )
 
-# Testing
-preds = trainer.predict(encoded_data['test'])
-print('----------------------------------------')
-print(preds[2])
-print('--------------------')
-incorrect = [path for pred, label, path in zip(preds[0], preds[1], data['test']['path']) if (pred[0] < pred[1] and label == 0) or (pred[0] > pred[1] and label == 1)]
-print(incorrect)
-print('----------------------------------------')
-
 trainer.train()
 
 # Testing
@@ -94,25 +82,3 @@ print('--------------------')
 incorrect = [path for pred, label, path in zip(preds[0], preds[1], data['test']['path']) if (pred[0] < pred[1] and label == 0) or (pred[0] > pred[1] and label == 1)]
 print(incorrect)
 print('----------------------------------------')
-
-'''
-trainer.model.save_pretrained('velarization')
-
-model = AutoModelForAudioClassification.from_pretrained('velarization')
-
-test_args = TrainingArguments(
-    output_dir = 'ransom',
-    do_train = False,
-    do_predict = True,
-    per_device_eval_batch_size = 16,   
-    dataloader_drop_last = False    
-)
-
-trainer = Trainer(
-    model = model, 
-    args = test_args, 
-    compute_metrics = compute_metrics
-)
-
-test_results = trainer.predict(encoded_data['test'])
-'''
