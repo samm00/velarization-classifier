@@ -82,6 +82,7 @@ cross-lingual phoneme recognition. arXiv.org. https://doi.org/10.48550/arXiv.210
 
 ### Appendix A. 
 All data recorded, total of 75 words (37 Velarized, 38 Non-Velarized).
+Also in words.csv file.
 
 |Non-Velarized/With Pair|Translation|Velarized/With Pair|Translation|Foil/Without Pair|Translation|
 |---|---|---|---|---|---|
