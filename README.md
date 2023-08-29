@@ -16,23 +16,23 @@ for fine-tuning.
 
 ### Methods:
 Collect data: 
-Record velarized and non-velarized words spoken by speakers of Lishan Didan (in this case I recorded them myself)
-Segregate recordings into separate audio files, labeled as velarized or non-velarized
-See Appendix A for all words used
+- Record velarized and non-velarized words spoken by speakers of Lishan Didan (in this case I recorded them myself)
+- Segregate recordings into separate audio files, labeled as velarized or non-velarized
+- See Appendix A for all words used
 Process data:
-Convert audio files to arrays with torch audio
-Augment the Data to 10 times its size
-Randomly applying frequency and time masking 5 different times for all files [adds x5 the data]
-Stretching the time by factors of 0.8, 0.9, 1.1, 1.2 for all files [adds x4 the data]
-Split files into train, validation, and test sets, and save to csv files.
-Fine tune facebook/wav2vec2-base from huggingface on the training/validation data
-Load the csv files into a dataset from huggingface’s dataset library
-Encode the data with a tokenizer from the model
-Train the model with the huggingface trainer
-hyperparameters: learning_rate=2e-5, batch_size=8, optimizer=AdamW, epochs=5, weight_decay=0.01, main_metric=f1
-training settings to decrease gpu usage: gradient_checkpointing=True,  fp16=True, gradient_accumulation_steps=4
-Evaluate the model on the test set 
-Make predictions on unseen data
+- Convert audio files to arrays with torch audio
+- Augment the Data to 10 times its size
+- Randomly applying frequency and time masking 5 different times for all files [adds x5 the data]
+- Stretching the time by factors of 0.8, 0.9, 1.1, 1.2 for all files [adds x4 the data]
+- Split files into train, validation, and test sets, and save to csv files.
+- Fine tune facebook/wav2vec2-base from huggingface on the training/validation data
+- Load the csv files into a dataset from huggingface’s dataset library
+- Encode the data with a tokenizer from the model
+- Train the model with the huggingface trainer
+- hyperparameters: learning_rate=2e-5, batch_size=8, optimizer=AdamW, epochs=5, weight_decay=0.01, main_metric=f1
+- training settings to decrease gpu usage: gradient_checkpointing=True,  fp16=True, gradient_accumulation_steps=4
+- Evaluate the model on the test set 
+- Make predictions on unseen data
 
 ### Materials: 
 Recordings of velarized and non velarized words in Lishan Didan, with sets
